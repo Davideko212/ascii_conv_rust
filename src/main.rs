@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::Write;
 use clap::{Command, load_yaml, Parser};
 use std::path::Path;
+use std::time::Instant;
 use image::{GenericImageView, Pixel};
 
 #[derive(Parser, Debug)]
@@ -15,6 +16,9 @@ struct Args {
 
     #[clap(short, long)]
     big_charset: bool,
+
+    #[clap(short, long)]
+    time: bool,
 }
 
 fn main() {
@@ -24,11 +28,13 @@ fn main() {
     let args = Args::parse();
 
     if check_file_validity(&args.input_path) {
-        file_output(convert(&args.input_path, args.big_charset), &args.output_path);
+        file_output(convert(&args.input_path, args.big_charset, args.time), &args.output_path);
     }
 }
 
-fn convert(input_path: &String, big_charset: bool) -> String {
+fn convert(input_path: &String, big_charset: bool, time: bool) -> String {
+    let start = Instant::now();
+
     let img = image::open(input_path).unwrap();
     let mut converted = String::new();
 
@@ -52,7 +58,12 @@ fn convert(input_path: &String, big_charset: bool) -> String {
         row.clear();
     }
 
+    let elapsed = start.elapsed();
+
     println!("Conversion successful");
+    if time {
+        println!("Conversion completed in {}ms", elapsed.as_millis());
+    }
     return converted;
 }
 

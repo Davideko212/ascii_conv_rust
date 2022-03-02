@@ -21,3 +21,7 @@ args:
         short: b
         long: big-charset
         help: Convert with 70 different chars instead of just 10
+    - time:
+        short: t
+        long: time
+        help: Tracks the conversion time and prints it once done
