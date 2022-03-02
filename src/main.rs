@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::Write;
 use clap::{Command, load_yaml, Parser};
 use std::path::Path;
+use std::{io, time};
 use std::time::Instant;
 use image::{GenericImageView, Pixel};
 
@@ -84,5 +85,24 @@ fn check_file_validity(path: &String) -> bool {
 
     } else {
         panic!("Invalid Filepath!");
+    }
+}
+
+fn loading_bar(length: i32) {
+    for n in 1..101 {
+        print!("\r[");
+        for n in 0..((length * n)/100) {
+            print!("=");
+        }
+        for n in ((length * n)/100)..length {
+            print!(" ");
+        }
+        print!("]");
+
+        print!(" - {}% done", n);
+
+        io::stdout().flush().unwrap();
+
+        std::thread::sleep(time::Duration::from_millis(10));
     }
 }
