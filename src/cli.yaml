@@ -1,0 +1,23 @@
+name: ascii_conv_rust
+version: "0.2.0"
+author: David Koch
+about: Converts images to ASCII art
+args:
+    - input_path:
+        short: i
+        long: input-path
+        value_name: PATH
+        help: Sets the path of the image input
+        takes_value: true
+        required: true
+    - output_path:
+        short: o
+        long: output-path
+        value_name: PATH
+        help: Sets the path of the ASCII-art output
+        takes_value: true
+        required: true
+    - big_charset:
+        short: b
+        long: big-charset
+        help: Convert with 70 different chars instead of just 10
