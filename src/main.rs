@@ -20,6 +20,9 @@ struct Args {
 
     #[clap(short, long)]
     time: bool,
+
+    #[clap(short, long)]
+    resolution: String,
 }
 
 fn main() {
@@ -29,14 +32,13 @@ fn main() {
     let args = Args::parse();
 
     if check_file_validity(&args.input_path) {
-        file_output(convert(&args.input_path, args.big_charset, args.time), &args.output_path);
+        file_output(convert(preprocessing(&args.input_path, &args.resolution), args.big_charset, args.time), &args.output_path);
     }
 }
 
-fn convert(input_path: &String, big_charset: bool, time: bool) -> String {
+fn convert(img: image::DynamicImage, big_charset: bool, time: bool) -> String {
     let start = Instant::now();
 
-    let img = image::open(input_path).unwrap();
     let mut converted = String::new();
 
     let char_vec: Vec<char>;
@@ -46,6 +48,8 @@ fn convert(input_path: &String, big_charset: bool, time: bool) -> String {
         char_vec = "@%#*+=-:. ".chars().collect();
     }
 
+    let mut percentage: f32 = 0.0;
+
     let mut row = String::new();
     for y in 0..img.height() {
         for x in 0..img.width() {
@@ -54,6 +58,11 @@ fn convert(input_path: &String, big_charset: bool, time: bool) -> String {
             let light: usize = (pixel_luma / 255.0 * ((char_vec.len() - 1) as f32)) as usize;
             row.push_str(char_vec[light].encode_utf8(&mut [0, 1]));
         }
+
+        percentage = ((y+1) as f32 / img.height() as f32) * 100.0;
+        println!("{:?}", percentage);
+
+        loading_bar(percentage as i32);
 
         converted.push_str(&[&row, "\n"].join(""));
         row.clear();
@@ -88,13 +97,13 @@ fn check_file_validity(path: &String) -> bool {
     }
 }
 
-fn loading_bar(length: i32) {
-    for n in 1..101 {
+fn loading_bar(percentage: i32) {
+    for n in 1..percentage {
         print!("\r[");
-        for n in 0..((length * n)/100) {
+        for n in 0..(percentage/2.5) {
             print!("=");
         }
-        for n in ((length * n)/100)..length {
+        for n in (percentage/2.5)..40 {
             print!(" ");
         }
         print!("]");
@@ -103,6 +112,17 @@ fn loading_bar(length: i32) {
 
         io::stdout().flush().unwrap();
 
-        std::thread::sleep(time::Duration::from_millis(10));
+        //std::thread::sleep(time::Duration::from_millis(10));
     }
+}
+
+fn preprocessing(input_path: &String, res: &String) -> image::DynamicImage {
+    let mut img = image::open(input_path).unwrap();
+
+    let dim_vec: Vec<&str> = res.split('x').collect();
+
+    // very very ugly
+    img = img.resize(dim_vec[0].parse::<u32>().unwrap(), dim_vec[1].parse::<u32>().unwrap(), image::imageops::FilterType::Nearest);
+
+    return img;
 }

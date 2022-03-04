@@ -25,3 +25,9 @@ args:
         short: t
         long: time
         help: Tracks the conversion time and prints it once done
+    - resolution:
+        short: r
+        long: resolution
+        value_name: WIDTHxHEIGHT
+        help: Sets the resolution of the output image
+        takes_value: true
