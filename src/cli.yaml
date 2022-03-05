@@ -31,3 +31,5 @@ args:
         value_name: WIDTHxHEIGHT
         help: Sets the resolution of the output image
         takes_value: true
+        default_value: ""
+        required: false

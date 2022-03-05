@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::Write;
 use clap::{Command, load_yaml, Parser};
 use std::path::Path;
-use std::{io, time};
+use std::io;
 use std::time::Instant;
 use image::{GenericImageView, Pixel};
 
@@ -60,7 +60,6 @@ fn convert(img: image::DynamicImage, big_charset: bool, time: bool) -> String {
         }
 
         percentage = ((y+1) as f32 / img.height() as f32) * 100.0;
-        println!("{:?}", percentage);
 
         loading_bar(percentage as i32);
 
@@ -70,7 +69,7 @@ fn convert(img: image::DynamicImage, big_charset: bool, time: bool) -> String {
 
     let elapsed = start.elapsed();
 
-    println!("Conversion successful");
+    println!("\n\rConversion successful");
     if time {
         println!("Conversion completed in {}ms", elapsed.as_millis());
     }
@@ -98,31 +97,34 @@ fn check_file_validity(path: &String) -> bool {
 }
 
 fn loading_bar(percentage: i32) {
-    for n in 1..percentage {
+    for _ in 1..percentage {
         print!("\r[");
-        for n in 0..(percentage/2.5) {
+        for _ in 0..((percentage as f32/2.5) as i32) {
             print!("=");
         }
-        for n in (percentage/2.5)..40 {
+        for _ in ((percentage as f32/2.5) as i32)..40 {
             print!(" ");
         }
         print!("]");
 
-        print!(" - {}% done", n);
+        print!(" - {}% done", percentage);
 
         io::stdout().flush().unwrap();
-
-        //std::thread::sleep(time::Duration::from_millis(10));
     }
 }
 
 fn preprocessing(input_path: &String, res: &String) -> image::DynamicImage {
     let mut img = image::open(input_path).unwrap();
 
-    let dim_vec: Vec<&str> = res.split('x').collect();
+    let mut dim_vec: Vec<&str>;
+    if res != "" {
+        dim_vec = res.split('x').collect();
+        // very very ugly
+        img = img.resize(dim_vec[0].parse::<u32>().unwrap(), dim_vec[1].parse::<u32>().unwrap(), image::imageops::FilterType::Nearest);
 
-    // very very ugly
-    img = img.resize(dim_vec[0].parse::<u32>().unwrap(), dim_vec[1].parse::<u32>().unwrap(), image::imageops::FilterType::Nearest);
+    } else {
+
+    }
 
     return img;
 }
