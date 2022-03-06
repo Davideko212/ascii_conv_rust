@@ -22,7 +22,7 @@ struct Args {
     time: bool,
 
     #[clap(short, long)]
-    resolution: String,
+    resolution: Option<String>,
 }
 
 fn main() {
@@ -32,7 +32,7 @@ fn main() {
     let args = Args::parse();
 
     if check_file_validity(&args.input_path) {
-        file_output(convert(preprocessing(&args.input_path, &args.resolution), args.big_charset, args.time), &args.output_path);
+        file_output(convert(preprocessing(&args.input_path, &args.resolution.unwrap_or("".to_string())), args.big_charset, args.time), &args.output_path);
     }
 }
 
@@ -61,7 +61,7 @@ fn convert(img: image::DynamicImage, big_charset: bool, time: bool) -> String {
 
         percentage = ((y+1) as f32 / img.height() as f32) * 100.0;
 
-        loading_bar(percentage as i32);
+        progress_bar(percentage as i32);
 
         converted.push_str(&[&row, "\n"].join(""));
         row.clear();
@@ -96,7 +96,7 @@ fn check_file_validity(path: &String) -> bool {
     }
 }
 
-fn loading_bar(percentage: i32) {
+fn progress_bar(percentage: i32) {
     for _ in 1..percentage {
         print!("\r[");
         for _ in 0..((percentage as f32/2.5) as i32) {
@@ -121,9 +121,6 @@ fn preprocessing(input_path: &String, res: &String) -> image::DynamicImage {
         dim_vec = res.split('x').collect();
         // very very ugly
         img = img.resize(dim_vec[0].parse::<u32>().unwrap(), dim_vec[1].parse::<u32>().unwrap(), image::imageops::FilterType::Nearest);
-
-    } else {
-
     }
 
     return img;
