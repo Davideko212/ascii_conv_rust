@@ -111,7 +111,7 @@ fn check_file_validity(path: &String) -> bool {
         println!("Filepath: {}", path);
 
         // Checking if the given file is of a supported file format
-        if ["png", "jpg", "jpeg"].contains(&Path::new(&path).extension().unwrap().to_str().unwrap()) {
+        if ["png", "jpg", "jpeg", "webp", "bmp"].contains(&Path::new(&path).extension().unwrap().to_str().unwrap().to_lowercase().as_str()) {
             return true;
         } else {
             panic!("Incorrect filetype!");
