@@ -32,3 +32,7 @@ args:
         help: Sets the resolution of the output image
         takes_value: true
         required: false
+    - preview:
+        short: p
+        long: preview
+        help: aaaaaaaaaaaaaaa

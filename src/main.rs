@@ -23,6 +23,9 @@ struct Args {
 
     #[clap(short, long)]
     resolution: Option<String>,
+
+    #[clap(short, long)]
+    preview: bool,
 }
 
 fn main() {
@@ -35,6 +38,11 @@ fn main() {
     // If the file is valid, convert
     if check_file_validity(&args.input_path) {
         file_output(convert(preprocessing(&args.input_path, &args.resolution.unwrap_or("".to_string())), args.big_charset, args.time), &args.output_path);
+        println!("\n\rConversion successful");
+
+        if args.preview {
+            preview(&args.input_path, args.big_charset);
+        }
     }
 }
 
@@ -90,7 +98,6 @@ fn convert(img: image::DynamicImage, big_charset: bool, time: bool) -> String {
     // End of tracking conversion time, calculating conversion time
     let elapsed = start.elapsed();
 
-    println!("\n\rConversion successful");
     if time {
         println!("Conversion completed in {}ms", elapsed.as_millis());
     }
@@ -155,4 +162,12 @@ fn preprocessing(input_path: &String, res: &String) -> image::DynamicImage {
     }
 
     return img;
+}
+
+fn preview(input_path: &String, big_charset: bool) {
+    if let Some((w, h)) = term_size::dimensions() {
+        print!("{}", convert(preprocessing(input_path, &[w.to_string(), h.to_string()].join("x")), big_charset, false));
+    } else {
+        println!("Unable to get terminal size!");
+    }
 }
