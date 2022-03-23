@@ -1,7 +1,10 @@
 [package]
 name = "ascii_conv_rust"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
+description = "Rust CLI App that converts images to ASCII art"
+readme = "README.md"
+repository = "https://github.com/Davideko212/ascii_conv_rust.git"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

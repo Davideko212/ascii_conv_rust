@@ -17,14 +17,6 @@ args:
         help: Sets the path of the ASCII-art output
         takes_value: true
         required: true
-    - big_charset:
-        short: b
-        long: big-charset
-        help: Convert with 70 different chars instead of just 10
-    - time:
-        short: t
-        long: time
-        help: Tracks the conversion time and prints it once done
     - resolution:
         short: r
         long: resolution
@@ -32,7 +24,18 @@ args:
         help: Sets the resolution of the output image
         takes_value: true
         required: false
+    - big_charset:
+        short: b
+        long: big-charset
+        help: Convert with 70 different chars instead of just 10
+        required: false
+    - time:
+        short: t
+        long: time
+        help: Tracks the conversion time and prints it once done
+        required: false
     - preview:
         short: p
         long: preview
-        help: aaaaaaaaaaaaaaa
+        help: Prints a preview of the converted image with the size of the terminal window when finished converting
+        required: false

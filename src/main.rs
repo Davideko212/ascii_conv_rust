@@ -2,7 +2,6 @@ use std::fs::File;
 use std::io::Write;
 use clap::{Command, load_yaml, Parser};
 use std::path::Path;
-use std::io;
 use std::time::Instant;
 use image::{GenericImageView, Pixel};
 
@@ -16,13 +15,13 @@ struct Args {
     output_path: String,
 
     #[clap(short, long)]
+    resolution: Option<String>,
+
+    #[clap(short, long)]
     big_charset: bool,
 
     #[clap(short, long)]
     time: bool,
-
-    #[clap(short, long)]
-    resolution: Option<String>,
 
     #[clap(short, long)]
     preview: bool,
@@ -165,7 +164,9 @@ fn preprocessing(input_path: &String, res: &String) -> image::DynamicImage {
 }
 
 fn preview(input_path: &String, big_charset: bool) {
+    // Get the dimensions of the terminal window
     if let Some((w, h)) = term_size::dimensions() {
+        // Print a converted ASCII-Image the size of the terminal window as a preview
         print!("{}", convert(preprocessing(input_path, &[w.to_string(), h.to_string()].join("x")), big_charset, false));
     } else {
         println!("Unable to get terminal size!");
