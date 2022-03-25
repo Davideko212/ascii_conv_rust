@@ -31,8 +31,8 @@ Rust CLI App that converts images to ASCII art
      <td>Output</td>
   </tr>
   <tr>
-    <td><img src="C:\Users\david\Desktop\rustacean.png" width="300" height="200"></td>
-    <td><img src="C:\Users\david\Desktop\ascii_rustacean.png" width="300" height="200"></td>
+    <td><img src=".\examples\rustacean.png" width="300" height="200"></td>
+    <td><img src=".\examples\ascii_rustacean.png" width="300" height="200"></td>
   </tr>
 </table>
 
@@ -51,8 +51,8 @@ This conversion took less than 1ms to complete during testing.
      <td>Output</td>
   </tr>
   <tr>
-    <td><img src="C:\Users\david\Desktop\tux.png" width="200" height="300"></td>
-    <td><img src="C:\Users\david\Desktop\ascii_tux.png" width="200" height="300"></td>
+    <td><img src=".\examples\tux.png" width="200" height="300"></td>
+    <td><img src=".\examples\ascii_tux.png" width="200" height="300"></td>
   </tr>
 </table>
 
