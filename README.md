@@ -3,7 +3,6 @@ Rust CLI App that converts images to ASCII art
 
 ## Arguments
 
----
 ### Required
 - Input path
 > `--input-path <PATH>` or `-i <PATH>`
@@ -22,7 +21,6 @@ Rust CLI App that converts images to ASCII art
 
 ## Example Usage
 
----
 ### Example #1:
 
 <table>
